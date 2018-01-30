@@ -16,7 +16,7 @@ module.exports = function (context, req) {
         context.log('This is an OAuth callback for Fitbit.');
 
         promise = requestToken('https://api.fitbit.com/oauth2/token', process.env['FITBIT_CLIENT_ID'], process.env['FITBIT_CLIENT_SECRET'], code, serviceName)
-        .then(response => {
+        .then((response) => {
             return {
                 fitbitUserId: response.user_id,
                 fitbitAccessToken: response.access_token,
@@ -33,7 +33,7 @@ module.exports = function (context, req) {
         return;
     }
 
-    promise.then(data => {
+    promise.then((data) => {
         context.res = {
             status: 302,
             headers: {
@@ -41,6 +41,14 @@ module.exports = function (context, req) {
             },
             body: ''
         };
+    })
+    .catch((error) => {
+        context.res = {
+            status: 500,
+            body: error
+        };
+    })
+    .finally(() => {
         context.done();
     });
 };
