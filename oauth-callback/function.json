@@ -8,8 +8,7 @@
       "name": "req",
       "methods": [
         "GET"
-      ],
-      "route": "/oauth/callback/{serviceName}"
+      ]
     },
     {
       "type": "http",

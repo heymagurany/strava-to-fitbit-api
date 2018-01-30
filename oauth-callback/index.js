@@ -1,8 +1,8 @@
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    var serviceName = context.params.serviceName;
-
+    var serviceName = context.query['service-name'];
+    
     if (serviceName === 'strava') {
 
     }

@@ -27,6 +27,15 @@
         "route": "/{file}.{extension}"
       },
       "backendUri": "https://stravatofitbit.blob.core.windows.net/web/{file}.{extension}"
+    },
+    "OAuth callback": {
+      "matchCondition": {
+        "methods": [
+          "GET"
+        ],
+        "route": "/oauth/callback/{serviceName}"
+      },
+      "backendUri": "https://strava-to-fitbit.azurewebsites.net/api/oauth-callback?service_name={serviceName}"
     }
   }
 }
