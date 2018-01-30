@@ -35,7 +35,10 @@
         ],
         "route": "/oauth/callback/{serviceName}"
       },
-      "backendUri": "https://strava-to-fitbit.azurewebsites.net/api/oauth-callback?service_name={serviceName}"
+      "backendUri": "https://strava-to-fitbit.azurewebsites.net/api/oauth-callback",
+      "requestOverrides": {
+        "backend.request.querystring.service_name": "{serviceName}"
+      }
     }
   }
 }

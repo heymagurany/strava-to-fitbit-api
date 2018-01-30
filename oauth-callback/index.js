@@ -4,10 +4,10 @@ module.exports = function (context, req) {
     var serviceName = context.query['service-name'];
     
     if (serviceName === 'strava') {
-
+        context.log('This is an OAuth callback for Strava.');
     }
     else if (serviceName === 'fitbit') {
-
+        context.log('This is an OAuth callback for Fitbit.');
     }
     else {
         context.res = {
