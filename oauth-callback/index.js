@@ -1,7 +1,7 @@
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    var serviceName = context.query['service_name'];
+    var serviceName = req.query['service_name'];
     
     if (serviceName === strava) {
         context.log('This is an OAuth callback for Strava.');
