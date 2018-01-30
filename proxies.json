@@ -6,7 +6,7 @@
         "methods": [
           "GET"
         ],
-        "route": "/{*path}"
+        "route": "/"
       },
       "backendUri": "https://stravatofitbit.blob.core.windows.net/web/index.html"
     },
