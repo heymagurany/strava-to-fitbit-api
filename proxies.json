@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json.schemastore.org/proxies",
+  "proxies": {
+    "web root": {
+      "matchCondition": {
+        "methods": [
+          "GET"
+        ],
+        "route": "/{*path}"
+      },
+      "backendUri": "https://stravatofitbit.blob.core.windows.net/web/index.html"
+    },
+    "web assets": {
+      "matchCondition": {
+        "methods": [
+          "GET"
+        ],
+        "route": "/assets/{*file}"
+      },
+      "backendUri": "https://stravatofitbit.blob.core.windows.net/web/assets/{file}"
+    },
+    "web static": {
+      "matchCondition": {
+        "methods": [
+          "GET"
+        ],
+        "route": "/{file}.{extension}"
+      },
+      "backendUri": "https://stravatofitbit.blob.core.windows.net/web/{file}.{extension}"
+    }
+  }
+}

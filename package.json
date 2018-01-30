@@ -1,0 +1,22 @@
+{
+  "name": "strava-to-fitbit-api",
+  "version": "1.0.0",
+  "description": "Azure functions used to facilitate saving your Strava activities to your Fitbit activity log.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heymagurany/strava-to-fitbit-api.git"
+  },
+  "author": "Matt Magurany",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/heymagurany/strava-to-fitbit-api/issues"
+  },
+  "homepage": "https://github.com/heymagurany/strava-to-fitbit-api#readme",
+  "dependencies": {
+    "azure-storage": "^2.7.0"
+  }
+}
