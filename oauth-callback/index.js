@@ -21,8 +21,9 @@ module.exports = function (context, req) {
     context.res = {
         status: 302,
         headers: {
-            "Location": 'https://strava-to-fitbit.azurewebsites.net'
-        }
+            'Location': 'https://strava-to-fitbit.azurewebsites.net'
+        },
+        body: ''
     };
     context.done();
 };
