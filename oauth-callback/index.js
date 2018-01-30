@@ -1,5 +1,5 @@
 var request = require('request-promise');
-var Base64 = require('js-base64');
+var Base64 = require('js-base64').Base64;
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
