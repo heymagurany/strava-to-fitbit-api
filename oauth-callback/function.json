@@ -9,7 +9,7 @@
       "methods": [
         "GET"
       ],
-      "rotue": "/oauth/callback/{serviceName}"
+      "route": "/oauth/callback/{serviceName}"
     },
     {
       "type": "http",
