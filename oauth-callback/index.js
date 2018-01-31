@@ -13,12 +13,10 @@ module.exports = function (context, req) {
         context.log('This is an OAuth callback for Fitbit.');
 
         promise = requestToken('https://api.fitbit.com/oauth2/token', process.env['FITBIT_CLIENT_ID'], process.env['FITBIT_CLIENT_SECRET'], code, serviceName)
-        .then((response) => {
-            return {
-                fitbitUserId: response.user_id,
-                fitbitAccessToken: response.access_token,
-                fitbitRefreshToken: response.refresh_token
-            };
+        .then((result) => {
+            context.log('Saving tokens for Fitbit user, "' + result.user_id + '."');
+    
+            return store.addTokens(serviceName, result.user_id, result.access_token, result.refresh_token);
         });
     }
     else {
@@ -30,10 +28,7 @@ module.exports = function (context, req) {
         return;
     }
 
-    promise.then((result) => {
-        return store.addTokens(serviceName, result.user_id, result.access_token, result.refresh_token);
-    })
-    .then(() => {
+    promise.then(() => {
         context.res = {
             status: 302,
             headers: {
@@ -43,6 +38,7 @@ module.exports = function (context, req) {
         };
     })
     .catch((error) => {
+        context.log('ErrorSaving token:\n' + error);
         context.res = {
             status: 500,
             body: error
