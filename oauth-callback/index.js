@@ -1,5 +1,6 @@
 var request = require('request-promise');
 var Base64 = require('js-base64').Base64;
+var store = require('../lib/store');
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
@@ -8,10 +9,6 @@ module.exports = function (context, req) {
     var code = req.query.code;
     var promise;
     
-    // if (serviceName === 'strava') {
-    //     context.log('This is an OAuth callback for Strava.');
-    // }
-    // else
     if (serviceName === 'fitbit') {
         context.log('This is an OAuth callback for Fitbit.');
 
@@ -33,11 +30,14 @@ module.exports = function (context, req) {
         return;
     }
 
-    promise.then((data) => {
+    promise.then((result) => {
+        return store.addTokens(serviceName, result.user_id, result.access_token, result.refresh_token);
+    })
+    .then(() => {
         context.res = {
             status: 302,
             headers: {
-                'Location': 'https://strava-to-fitbit.azurewebsites.net?fid=' + data.fitbitUserId
+                'Location': 'https://strava-to-fitbit.azurewebsites.net'
             },
             body: ''
         };

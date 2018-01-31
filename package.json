@@ -18,7 +18,10 @@
   "homepage": "https://github.com/heymagurany/strava-to-fitbit-api#readme",
   "dependencies": {
     "azure-storage": "^2.7.0",
+    "bluebird": "^3.5.1",
     "js-base64": "^2.4.3",
+    "lodash": "^4.17.4",
+    "moment": "^2.20.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   }
