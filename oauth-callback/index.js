@@ -58,9 +58,9 @@ function requestToken(url, clientId, clientSecret, code, serviceName) {
         method: 'POST',
         uri: url,
         headers: {
-            Authorization: 'Basic ' + Base64.encode(clientId + ':' + clientSecret)
+            'Authorization': 'Basic ' + Base64.encode(clientId + ':' + clientSecret)
         },
-        formData: {
+        form: {
             code: code,
             grant_type: 'authorization_code',
             client_id: clientId,
