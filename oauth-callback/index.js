@@ -1,5 +1,6 @@
 var request = require('request-promise');
 var fitbit = require('../lib/fitbit');
+var strava = require('../lib/strava');
 
 module.exports = function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
@@ -12,6 +13,11 @@ module.exports = function (context, req) {
         context.log('This is an OAuth callback for Fitbit.');
 
         promise = fitbit.saveTokens(code);
+    }
+    else if (serviceName === 'strava') {
+        context.log('This is an OAuth callback for Strava.');
+
+        promise = strava.saveTokens(code);
     }
     else {
         context.res = {
