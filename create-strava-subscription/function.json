@@ -1,0 +1,10 @@
+{
+  "disabled": false,
+  "bindings": [
+    {      
+      "authLevel": "anonymous",
+      "type": "manualTrigger",
+      "direction": "in"
+    }
+  ]
+}
