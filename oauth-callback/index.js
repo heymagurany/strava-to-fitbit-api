@@ -12,12 +12,12 @@ module.exports = function (context, req) {
     if (serviceName === 'fitbit') {
         context.log('This is an OAuth callback for Fitbit.');
 
-        promise = fitbit.saveTokens(code);
+        promise = fitbit.saveAuthorization(code);
     }
     else if (serviceName === 'strava') {
         context.log('This is an OAuth callback for Strava.');
 
-        promise = strava.saveTokens(code);
+        promise = strava.saveAuthorization(code);
     }
     else {
         context.res = {
