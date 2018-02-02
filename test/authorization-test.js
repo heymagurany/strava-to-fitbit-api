@@ -25,7 +25,7 @@ test('a cookie with the auth token is validated', (assert) => {
   assert.expect(2);
 
   var done = assert.async();
-  var token = 'fitbit=1234&strava=abcd';
+  var token = 'fitbit1234stravaabcd';
   var hmac = crypto.createHmac('sha256', env.authTokenSecret);
   hmac.update(token);
   var context = {
@@ -33,7 +33,7 @@ test('a cookie with the auth token is validated', (assert) => {
   };  
   var req = {
     cookies: {
-      auth: encodeURIComponent(token + '&hmacsha256=' + hmac.digest('base64'))
+      auth: encodeURIComponent('fitbit=1234&strava=abcd&hmacsha256=' + encodeURIComponent(hmac.digest('base64')))
     }
   };
 
