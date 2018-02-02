@@ -38,13 +38,14 @@ module.exports = authorization.withUserContext((context, req) => {
         }
         
         user[serviceName] = userId;
-        context.res = authorization.setToken(user, {
+        context.res = {
             status: 302,
             headers: {
                 'Location': 'https://strava-to-fitbit.azurewebsites.net'
             },
             body: ''
-        });
+        };
+        authorization.setToken(user, context.res);
     })
     .catch((error) => {
         context.log('ErrorSaving token:\n' + error);
