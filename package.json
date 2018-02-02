@@ -19,6 +19,7 @@
   "dependencies": {
     "azure-storage": "^2.7.0",
     "bluebird": "^3.5.1",
+    "form-urlencoded": "^2.0.4",
     "js-base64": "^2.4.3",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
