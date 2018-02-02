@@ -32,8 +32,8 @@ test('a cookie with the auth token is validated', (assert) => {
     done: done
   };  
   var req = {
-    cookies: {
-      auth: encodeURIComponent('fitbit=1234&strava=abcd&hmacsha256=' + encodeURIComponent(hmac.digest('base64')))
+    headers: {
+      'Cookie': 'auth=' + encodeURIComponent('fitbit=1234&strava=abcd&hmacsha256=' + encodeURIComponent(hmac.digest('base64')))
     }
   };
 
