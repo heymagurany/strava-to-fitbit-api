@@ -5,7 +5,6 @@ const authorization = require('../lib/authorization');
 
 module.exports = authorization.withUserContext((context, req) => {
     context.log('JavaScript HTTP trigger function processed a request.');
-    context.log(JSON.stringify(req.headers));
 
     var serviceName = req.query.service_name;
     var code = req.query.code;
