@@ -1,0 +1,23 @@
+@startuml
+
+state "No Authorization" as NoAuthz
+NoAuthz: Access tokens and user IDs for both Strava and Fitbit are not stored.
+
+state "User has cookie" as Cookie
+Cookie: The user agent has a cooke from a previous authorization request
+
+state "Connected to Strava" as HaveStrava
+HaveStrava: Access token and user ID for strava are stored and a cookie is created.
+
+state "Connected to Strava and Fitbit" as HaveBoth
+HaveBoth: Access token and user ID for Strava and Fitbit are stored.
+
+[*] --> NoAuthz : No cookie found
+NoAuthz --> HaveStrava : Connect to Strava
+[*] --> Cookie : Cookie found
+Cookie --> HaveStrava : Found Strava info
+Cookie --> HaveBoth : Found Strava and Fitbit info
+HaveStrava --> HaveBoth : Connect to Fitbit
+HaveBoth --> [*] : User is authorized
+
+@enduml
