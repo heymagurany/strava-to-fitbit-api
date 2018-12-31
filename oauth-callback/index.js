@@ -1,5 +1,5 @@
 const authorization = require('../lib/authorization');
-const store = require('./store');
+const store = require('../lib/store');
 
 module.exports = authorization.withUserContext((context, req) => {
     context.log('JavaScript HTTP trigger function processed a request.');
