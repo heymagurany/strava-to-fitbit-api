@@ -41,31 +41,31 @@ module.exports = authorization.withUserContext((context, req) => {
 
     service.fromAuthorizationCode(code).then((result) => {
         if (!userToken) {
-            userToken = {
-                [serviceName]: {
-                    userId: result.userId,
-                    accessToken: result.accessToken,
-                    refreshToken: result.refreshToken
-                }
+            userToken = {};
+        }        
+        
+        userToken[serviceName] = {
+            userId: result.userId,
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken
+        }
+        
+        return store.saveUserToken(userToken).then(() => {
+            if (!user) {
+                user = {};
+            }
+            
+            user[serviceName] = result.userId;
+            context.res = {
+                status: 302,
+                headers: {
+                    // TODO: get the redirect location from the state param
+                    'Location': 'https://strava-to-fitbit.azurewebsites.net'
+                },
+                body: ''
             };
-        }
-        
-        return store.saveUserToken(userToken).then(() => result);
-    }).then((result) => {
-        if (!user) {
-            user = {};
-        }
-        
-        user[serviceName] = result.userId;
-        context.res = {
-            status: 302,
-            headers: {
-                // TODO: get the redirect location from the state param
-                'Location': 'https://strava-to-fitbit.azurewebsites.net'
-            },
-            body: ''
-        };
-        authorization.setToken(user, context.res);
+            authorization.setToken(user, context.res);
+        })
     }).catch((error) => {
         context.log('ErrorSaving token:\n' + error);
         context.res = {
