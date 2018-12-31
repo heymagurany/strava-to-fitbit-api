@@ -39,9 +39,7 @@ module.exports = authorization.withUserContext((context, req) => {
         return;
     }
 
-    service.fromAuthorizationCode(code)
-    .then((result) => {
-
+    service.fromAuthorizationCode(code).then((result) => {
         if (!userToken) {
             userToken = {
                 [serviceName]: {
@@ -51,8 +49,9 @@ module.exports = authorization.withUserContext((context, req) => {
                 }
             };
         }
-        store.saveUserToken(userToken);
         
+        return store.saveUserToken(userToken).then(() => result);
+    }).then((result) => {
         if (!user) {
             user = {};
         }
@@ -67,15 +66,13 @@ module.exports = authorization.withUserContext((context, req) => {
             body: ''
         };
         authorization.setToken(user, context.res);
-    })
-    .catch((error) => {
+    }).catch((error) => {
         context.log('ErrorSaving token:\n' + error);
         context.res = {
             status: 500,
             body: error
         };
-    })
-    .finally(() => {
+    }).finally(() => {
         context.done();
     });
 });
