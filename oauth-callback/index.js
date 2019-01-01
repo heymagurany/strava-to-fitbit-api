@@ -1,6 +1,6 @@
 const authorization = require('../lib/authorization');
 const store = require('../lib/store');
-const Promise = require('bluebird');
+const env = require('../lib/environment');
 
 module.exports = authorization.withUserContext((context, req) => {
     context.log('JavaScript HTTP trigger function processed a request.');
@@ -9,12 +9,11 @@ module.exports = authorization.withUserContext((context, req) => {
     var serviceName = req.query.service_name;
     var code = req.query.code;
     var service;
-    var userTokenPromise;
 
     if (serviceName === 'fitbit') {
         context.log('This is an OAuth callback for Fitbit.');
 
-        if (!user || !user.strava) {
+        if (!user.id) {
             context.res = {
                 status: 400,
                 body: 'Strava must be connected first.'
@@ -24,13 +23,11 @@ module.exports = authorization.withUserContext((context, req) => {
         }
 
         service = require('../lib/fitbit');
-        userTokenPromise = store.getUserToken(user.strava);
     }
     else if (serviceName === 'strava') {
         context.log('This is an OAuth callback for Strava.');
 
         service = require('../lib/strava');
-        userTokenPromise = Promise.resolve({})
     }
     else {
         context.res = {
@@ -43,36 +40,23 @@ module.exports = authorization.withUserContext((context, req) => {
 
     service.fromAuthorizationCode(code).then((result) => {
         context.log('Got token from service, "' + serviceName + '."');
-        
-        return userTokenPromise.then((userToken) => {
-            context.log('Retrieved saved token.');
 
-            userToken[serviceName] = {
-                userId: result.userId,
-                accessToken: result.accessToken,
-                refreshToken: result.refreshToken
+        user[serviceName] = {
+            userId: result.userId,
+            accessToken: result.accessToken,
+            refreshToken: result.refreshToken
+        };
+
+        return store.saveUserToken(user).then(() => {
+            context.log('Saved token.');            
+            context.res = {
+                status: 302,
+                headers: {
+                    'Location': env.uiUrl
+                },
+                body: ''
             };
-
-            context.log('Token: ' + JSON.stringify(userToken));
-
-            return store.saveUserToken(userToken).then(() => {
-                context.log('Saved token.');
-
-                if (!user) {
-                    user = {};
-                }
-
-                user[serviceName] = result.userId;
-                context.res = {
-                    status: 302,
-                    headers: {
-                        // TODO: get the redirect location from the state param
-                        'Location': 'https://strava-to-fitbit.azurewebsites.net'
-                    },
-                    body: ''
-                };
-                authorization.setToken(user, context.res);
-            });
+            authorization.setToken(user.strava.userId, context.res);
         });
     }).catch((error) => {
         context.log('Error saving token:\n' + error);
