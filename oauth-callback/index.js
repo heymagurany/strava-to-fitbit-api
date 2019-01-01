@@ -24,7 +24,7 @@ module.exports = authorization.withUserContext((context, req) => {
         }
 
         service = require('../lib/fitbit');
-        userTokenPromise = store.getUserToken(user.strava).then((userToken) => Promise.resolve(userToken));
+        userTokenPromise = store.getUserToken(user.strava);
     }
     else if (serviceName === 'strava') {
         context.log('This is an OAuth callback for Strava.');
@@ -42,7 +42,11 @@ module.exports = authorization.withUserContext((context, req) => {
     }
 
     service.fromAuthorizationCode(code).then((result) => {
+        context.log('Got token from service, "' + serviceName + '."');
+        
         return userTokenPromise.then((userToken) => {
+            context.log('Retrieved saved token.');
+
             userToken[serviceName] = {
                 userId: result.userId,
                 accessToken: result.accessToken,
@@ -50,6 +54,8 @@ module.exports = authorization.withUserContext((context, req) => {
             };
 
             return store.saveUserToken(userToken).then(() => {
+                context.log('Saved token.');
+
                 if (!user) {
                     user = {};
                 }
@@ -67,7 +73,7 @@ module.exports = authorization.withUserContext((context, req) => {
             });
         });
     }).catch((error) => {
-        context.log('ErrorSaving token:\n' + error);
+        context.log('Error saving token:\n' + error);
         context.res = {
             status: 500,
             body: error
