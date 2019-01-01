@@ -1,16 +1,20 @@
 const store = require('../lib/store');
 const strava = require('../lib/strava');
 
-module.exports = function (context, message) {
-    let event = context.bindings.stravaEvent;
-    let userId = event.owner_id;
+module.exports = function (context) {
+    const event = context.bindings.stravaEvent;
 
-    context.log('Processing a Strava event. ' + event);
+    context.log('Processing a Strava event.\n' + JSON.stringify(event));
 
-    store.getUserToken(userId).then((user) => {
+    store.getUserToken(event.userId).then((user) => {
         context.log('Fetched user token');
-        let stravaApi = strava.fromUser(user);
+        
+        const stravaApi = strava.fromUser(user);
+        
+        return stravaApi.getActivity(event.activityId).then((stravaActivity) => {
+            console.log('Fetched strava activity.\n' + JSON.stringify(stravaActivity));
+        });
     }).finally(() => {
         context.done()
-    });;
+    });
 };
