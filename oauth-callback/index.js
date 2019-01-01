@@ -8,7 +8,8 @@ module.exports = authorization.withUserContext((context, req) => {
     var user = context.user;
     var serviceName = req.query.service_name;
     var code = req.query.code;
-    var promise;
+    var service;
+    var userTokenPromise;
 
     if (serviceName === 'fitbit') {
         context.log('This is an OAuth callback for Fitbit.');
@@ -22,12 +23,14 @@ module.exports = authorization.withUserContext((context, req) => {
             return;
         }
 
-        promise = store.getUserToken(user.strava).then((userToken) => Promise.resolve(require('../lib/fitbit'), userToken));
+        service = require('../lib/fitbit');
+        userTokenPromise = store.getUserToken(user.strava).then((userToken) => Promise.resolve(userToken));
     }
     else if (serviceName === 'strava') {
         context.log('This is an OAuth callback for Strava.');
 
-        promise = Promise.resolve(require('../lib/strava'), {})
+        service = require('../lib/strava');
+        userTokenPromise = Promise.resolve({})
     }
     else {
         context.res = {
@@ -38,8 +41,8 @@ module.exports = authorization.withUserContext((context, req) => {
         return;
     }
 
-    promise.then((service, userToken) => {
-        return service.fromAuthorizationCode(code).then((result) => {
+    service.fromAuthorizationCode(code).then((result) => {
+        return userTokenPromise.then((userToken) => {
             userToken[serviceName] = {
                 userId: result.userId,
                 accessToken: result.accessToken,
