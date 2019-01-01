@@ -53,6 +53,8 @@ module.exports = authorization.withUserContext((context, req) => {
                 refreshToken: result.refreshToken
             };
 
+            context.log('Token: ' + JSON.stringify(userToken));
+
             return store.saveUserToken(userToken).then(() => {
                 context.log('Saved token.');
 
