@@ -10,9 +10,11 @@ module.exports = function (context) {
         context.log('Fetched user token');
         
         const stravaApi = strava.fromUser(user);
+
+        context.log('Strava API: ' + stravaApi);
         
         return stravaApi.getActivity(event.activityId).then((stravaActivity) => {
-            console.log('Fetched strava activity.\n' + JSON.stringify(stravaActivity));
+            context.log('Fetched strava activity.\n' + JSON.stringify(stravaActivity));
         });
     }).catch((error) => {
         context.log('Failed to log activity to Fitbit.\n' + error);
