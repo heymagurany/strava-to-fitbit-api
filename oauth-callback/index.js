@@ -47,7 +47,7 @@ module.exports = authorization.withUserContext((context, req) => {
                 userId: result.userId,
                 accessToken: result.accessToken,
                 refreshToken: result.refreshToken
-            }
+            };
 
             return store.saveUserToken(userToken).then(() => {
                 if (!user) {
