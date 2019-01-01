@@ -39,7 +39,7 @@ module.exports = authorization.withUserContext((context, req) => {
     }
 
     promise.then((service, userToken) => {
-        service.fromAuthorizationCode(code).then((result) => {
+        return service.fromAuthorizationCode(code).then((result) => {
             userToken[serviceName] = {
                 userId: result.userId,
                 accessToken: result.accessToken,
@@ -61,8 +61,8 @@ module.exports = authorization.withUserContext((context, req) => {
                     body: ''
                 };
                 authorization.setToken(user, context.res);
-            })
-        })
+            });
+        });
     }).catch((error) => {
         context.log('ErrorSaving token:\n' + error);
         context.res = {
