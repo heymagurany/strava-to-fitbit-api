@@ -14,6 +14,8 @@ module.exports = function (context) {
         return stravaApi.getActivity(event.activityId).then((stravaActivity) => {
             console.log('Fetched strava activity.\n' + JSON.stringify(stravaActivity));
         });
+    }).catch((error) => {
+        context.log('Failed to log activity to Fitbit.\n' + error);
     }).finally(() => {
         context.done()
     });
