@@ -1,5 +1,4 @@
 const authorization = require('../lib/authorization');
-const store = require('../lib/store');
 const env = require('../lib/environment');
 
 module.exports = authorization.withUserContext((context, req) => {
@@ -47,7 +46,7 @@ module.exports = authorization.withUserContext((context, req) => {
             refreshToken: result.refreshToken
         };
 
-        return store.saveUserToken(user).then(() => {
+        return authorization.setToken(user, context.res).then(() => {
             context.log('Saved token.');            
             context.res = {
                 status: 302,
@@ -56,7 +55,6 @@ module.exports = authorization.withUserContext((context, req) => {
                 },
                 body: ''
             };
-            authorization.setToken(user.strava.userId, context.res);
         });
     }).catch((error) => {
         context.log('Error saving token:\n' + error);
