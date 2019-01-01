@@ -45,16 +45,17 @@ module.exports = authorization.withUserContext((context, req) => {
             accessToken: result.accessToken,
             refreshToken: result.refreshToken
         };
+        
+        context.res = {
+            status: 302,
+            headers: {
+                'Location': env.uiUrl
+            },
+            body: ''
+        };
 
         return authorization.setToken(user, context.res).then(() => {
-            context.log('Saved token.');            
-            context.res = {
-                status: 302,
-                headers: {
-                    'Location': env.uiUrl
-                },
-                body: ''
-            };
+            context.log('Saved token.');
         });
     }).catch((error) => {
         context.log('Error saving token:\n' + error);
